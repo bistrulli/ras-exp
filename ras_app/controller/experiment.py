@@ -47,16 +47,16 @@ try:
         sys.stopClient()
         sys.stopSystem()
         
-        plt.figure()
-        plt.plot(queue,label="queuelength")
-        plt.plot(tgt_v,color='r',linestyle='--',label="tgt")
-        #plt.axhline(y=tgt_v, color='r', linestyle='--',label="tgt")
-        plt.legend()
-        plt.savefig("rt.pdf")
-        
-        plt.figure()
-        plt.plot(S,label="cores")
-        plt.savefig("core.pdf")
+    plt.figure()
+    plt.plot(queue,label="queuelength")
+    plt.plot(tgt_v,color='r',linestyle='--',label="tgt")
+    #plt.axhline(y=tgt_v, color='r', linestyle='--',label="tgt")
+    plt.legend()
+    plt.savefig("rt.pdf")
+    
+    plt.figure()
+    plt.plot(S,label="cores")
+    plt.savefig("core.pdf")
     
 except Exception as ex:
     traceback.print_exception(type(ex), ex, ex.__traceback__)
