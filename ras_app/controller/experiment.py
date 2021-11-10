@@ -33,9 +33,8 @@ tgt_v = (1)/(1+0.1*tgt)*pop
 try:
     for i in tqdm(range(nstep)):
         state=sys.getstate(r)[0] 
-        print(state[0],i)
         
-        optS=[max(0.001,float(state[1])/tgt)]
+        optS=[float(state[1])/tgt]
         
         r.set("t1_hw",optS[0])
         if(isCpu):
@@ -50,8 +49,8 @@ try:
     sys.stopSystem()
     
     
-    T=np.linspace(1,nstep,nstep+1)
-    q_avg=np.divide(np.cumsum(queue),T) 
+    T=np.linspace(0,nstep,nstep)
+    q_avg=np.divide(np.cumsum(queue)[1:],T[1:]) 
     
     e=abs(q_avg[-1]-tgt_v)*100/tgt_v
     
