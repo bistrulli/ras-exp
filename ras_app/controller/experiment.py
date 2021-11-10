@@ -12,7 +12,7 @@ import traceback
 
 isCpu=True
 sys = jvm_sys("../",isCpu)
-nstep = 500
+nstep = 1000
 stime = 0.1
 tgt=2
 S=[]
@@ -42,7 +42,7 @@ try:
         
         queue.append(state[0])
         S.append(optS[0])
-        print(state,optS,tgt_v)
+        #print(state,optS,tgt_v)
         time.sleep(stime)
     
     sys.stopClient()
