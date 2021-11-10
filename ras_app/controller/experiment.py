@@ -9,7 +9,7 @@ from jvm_sys import jvm_sys
 from pymemcache.client.base import Client
         
 
-isCpu=False
+isCpu=True
 sys = jvm_sys("../",isCpu)
 nstep = 500
 stime = 0.1
@@ -37,6 +37,8 @@ try:
         optS=[max(0.001,float(state[1])/tgt)]
         
         r.set("t1_hw",optS[0])
+        if(isCpu):
+            sys.setU(optS[0],"tier1")
         
         queue.append(state[0])
         S.append(optS[0])
