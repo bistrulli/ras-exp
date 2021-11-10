@@ -7,6 +7,7 @@ from tqdm import tqdm
 from cgroupspy import trees
 from jvm_sys import jvm_sys
 from pymemcache.client.base import Client
+import traceback
         
 
 isCpu=True
@@ -66,8 +67,8 @@ try:
     plt.plot(S,label="cores")
     plt.savefig("core.pdf")
 
-except Exception as e:
-    print(e)
+except Exception as ex:
+    traceback.print_exception(type(ex), ex, ex.__traceback__)
     sys.stopClient()
     sys.stopSystem()
 
