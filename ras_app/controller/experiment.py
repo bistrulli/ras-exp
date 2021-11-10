@@ -13,7 +13,7 @@ isCpu=True
 sys = jvm_sys("../",isCpu)
 nstep = 500
 stime = 0.1
-tgt=5
+tgt=2
 S=[]
 
 rt = []
