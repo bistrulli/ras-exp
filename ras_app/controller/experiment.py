@@ -16,7 +16,7 @@ nstep = 500
 stime = 0.1
 tgt=2
 S=[]
-nrep=2
+nrep=4
 tgt_v=[]
 queue=[]
 
@@ -28,6 +28,7 @@ try:
         pop=np.random.randint(low=10, high=100)
         r=Client("localhost:11211")
         sys.startClient(pop)
+        time.sleep(0.5)
     
         for i in tqdm(range(nstep)):
             state=sys.getstate(r)[0] 
