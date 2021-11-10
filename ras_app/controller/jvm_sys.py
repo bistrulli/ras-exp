@@ -217,7 +217,7 @@ class jvm_sys(system_interface):
         quota=int(np.round(RL * self.period))
     
         self.cgroups[cnt_name]["cg"].controller.cfs_period_us=self.period
-        self.cgroups[cnt_name]["cg"].controller.cfs_quota_us = quota
+        self.cgroups[cnt_name]["cg"].controller.cfs_quota_us = max(quota,1000) 
         
        
             
