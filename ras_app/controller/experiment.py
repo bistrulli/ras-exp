@@ -47,27 +47,27 @@ try:
     
     sys.stopClient()
     sys.stopSystem()
+    
+    
+    T=np.linspace(0,nstep,nstep)
+    q_avg=np.divide(np.cumsum(queue),T) 
+    
+    e=abs(q_avg[-1]-tgt_v)*100/tgt_v
+    
+    print(e)
+    
+    plt.figure()
+    plt.plot(q_avg)
+    plt.axhline(y=tgt_v, color='r', linestyle='--',label="tgt")
+    plt.legend()
+    plt.savefig("rt.pdf")
+    
+    plt.figure()
+    plt.plot(S,label="cores")
+    plt.savefig("core.pdf")
+
 except Exception as e:
+    print(e)
     sys.stopClient()
     sys.stopSystem()
-    
-    
-T=np.linspace(0,nstep,nstep)
-q_avg=np.divide(np.cumsum(queue),T) 
-
-e=abs(q_avg[-1]-tgt_v)*100/tgt_v
-
-print(e)
-
-
-
-plt.figure()
-plt.plot(q_avg)
-plt.axhline(y=tgt_v, color='r', linestyle='--',label="tgt")
-plt.legend()
-plt.savefig("rt.pdf")
-
-plt.figure()
-plt.plot(S,label="cores")
-plt.savefig("core.pdf")
 
