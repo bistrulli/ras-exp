@@ -50,7 +50,7 @@ try:
     sys.stopSystem()
     
     
-    T=np.linspace(0,nstep,nstep)
+    T=np.linspace(1,nstep,nstep+1)
     q_avg=np.divide(np.cumsum(queue),T) 
     
     e=abs(q_avg[-1]-tgt_v)*100/tgt_v
