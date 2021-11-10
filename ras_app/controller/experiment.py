@@ -16,22 +16,19 @@ nstep = 500
 stime = 0.1
 tgt=2
 S=[]
-nrep=1
+nrep=2
 tgt_v=[]
-
-
-sys.startSys(isCpu)
-optS=None
+queue=[]
 
 try:
     for rep in range(nrep):
-    
+        
+        sys.startSys(isCpu)
+        optS=None
         pop=np.random.randint(low=10, high=100)
         r=Client("localhost:11211")
         sys.startClient(pop)
-        queue=[]
-        
-         
+    
         for i in tqdm(range(nstep)):
             state=sys.getstate(r)[0] 
             
@@ -49,8 +46,6 @@ try:
         
         sys.stopClient()
         sys.stopSystem()
-        
-        print(e)
         
         plt.figure()
         plt.plot(queue,label="queuelength")
