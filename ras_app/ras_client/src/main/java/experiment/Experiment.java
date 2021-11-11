@@ -5,20 +5,18 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 import Server.SimpleTask;
 import app.Client;
 import net.spy.memcached.MemcachedClient;
 
-public class RandomStep implements Runnable {
-
-	private Integer tick = null;
-	private SimpleTask workGenerator = null;
-	private Random rnd=null;
-	private MemcachedClient memClient=null;
-
-	public RandomStep(SimpleTask workGenerator) {
+public abstract class Experiment implements Runnable{
+	Integer tick = null;
+	SimpleTask workGenerator = null;
+	Random rnd=null;
+	MemcachedClient memClient=null;
+	
+	public Experiment(SimpleTask workGenerator) {
 		this.tick = 0;
 		this.workGenerator = workGenerator;
 		this.rnd=new Random();
@@ -28,8 +26,8 @@ public class RandomStep implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
-	private void addClients(int delta) {
+	
+	public void addClients(int delta) {
 		int actualSize = this.workGenerator.getThreadpool().getCorePoolSize();
 		try {
 			this.workGenerator.setThreadPoolSize(actualSize+delta);
@@ -59,30 +57,7 @@ public class RandomStep implements Runnable {
 			}
 		}
 	}
-
-	public void tick() {
-		int nc=0;
-		if (this.tick % 30 == 0) {
-			if(this.rnd.nextBoolean()) {
-				nc=this.rnd.nextInt(200-this.workGenerator.getThreadpool().getCorePoolSize());
-				System.out.println(String.format("delta clients %d-%d", nc,this.workGenerator.getThreadpool().getCorePoolSize()));
-				this.addClients(nc);
-			}else {
-				nc=this.rnd.nextInt(this.workGenerator.getThreadpool().getCorePoolSize());
-				System.out.println(String.format("delta clients %d-%d", -nc,this.workGenerator.getThreadpool().getCorePoolSize()));
-				this.addClients(-nc);
-			}
-			try {
-				this.memClient.set("sim", 3600,"step").get();
-			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
-			}
-		}
-		this.tick++;
-	}
-
-	@Override
-	public void run() {
-		this.tick();
-	}
+	
+	public abstract void tick();
+	
 }

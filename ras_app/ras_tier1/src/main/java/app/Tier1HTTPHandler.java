@@ -69,6 +69,7 @@ public class Tier1HTTPHandler extends TierHttpHandler {
 		outputStream = null;
 		
 		Long rtime=System.nanoTime()-Long.valueOf( this.getLqntask().getEnqueueTime().get(params.get("id")));
+		this.getLqntask().getRts().addSample(rtime);
 		//System.out.println(String.format("%f",rtime*1.0/Math.pow(10,9)));
 	}
 

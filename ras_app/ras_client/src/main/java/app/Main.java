@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 import Server.SimpleTask;
 import experiment.RandomStep;
+import experiment.SinGen;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import net.spy.memcached.MemcachedClient;
@@ -36,7 +37,7 @@ public class Main {
 		final SimpleTask[] Sys = Main.genSystem();
 		Main.resetState(Sys[0]);
 		Sys[0].start();
-		//Main.startSim(Sys[0]);
+		Main.startSim(Sys[0]);
 	}
 
 	public static void resetState(SimpleTask task) {
@@ -81,8 +82,8 @@ public class Main {
 
 	private static void startSim(SimpleTask client) {
 		ScheduledExecutorService se = Executors.newSingleThreadScheduledExecutor();
-		RandomStep simClock = new RandomStep(client);
-		se.scheduleAtFixedRate(simClock, 0, 1, TimeUnit.SECONDS);
+		SinGen sim= new SinGen(client, 25, 20);
+		se.scheduleAtFixedRate(sim, 0, 1, TimeUnit.SECONDS);
 	}
 
 	public static void getCliOptions(String[] args) {

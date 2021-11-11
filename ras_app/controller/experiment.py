@@ -12,52 +12,82 @@ import traceback
 
 isCpu=True
 sys = jvm_sys("../",isCpu)
-nstep = 500
+nstep = 3000
 stime = 0.1
-tgt=2
+tgt=4
 S=[]
-nrep=4
+nrep=10
+drep=0
 tgt_v=[]
 queue=[]
+rts=[]
+step=0
+Ik=0
+
+sys.startSys(isCpu)
+optS=None
+r=Client("localhost:11211")
+pop=100
+sys.startClient(pop)
+#r.set("t1_hw",20)
+pops=[pop]
 
 try:
-    for rep in range(nrep):
+    while True:
+        if r.get("sim").decode('UTF-8')=="step":
+            r.set("sim","-1")
+            if(drep>=nrep):
+                break
+            drep+=1
+            print("change")
+            
         
-        sys.startSys(isCpu)
-        optS=None
-        pop=np.random.randint(low=10, high=100)
-        r=Client("localhost:11211")
-        sys.startClient(pop)
-        time.sleep(0.5)
+        #print(step,drep,nrep)
+        state=sys.getstate(r)[0]
+        pops.append(np.sum(state))
+        
+        optS=[float(state[1])/tgt+(0.1*Ik)]
+        
+        r.set("t1_hw",optS[0])
+        if(isCpu):
+            sys.setU(optS[0],"tier1")
+        
+        queue.append(state[0])
+        S.append(optS[0])
+        #tgt_v.append((1)/(1+0.1*tgt)*np.sum(state))
+        rts.append(float(r.get("rt_t1"))/(10**9));
+        time.sleep(0.05)
+        if(not np.isnan(rts[-1])):
+            Ik+=rts[-1]-tgt*0.1
+        step+=1
+        
+    print("finished",step,drep)
+        
+    sys.stopClient()
+    sys.stopSystem()
     
-        for i in tqdm(range(nstep)):
-            state=sys.getstate(r)[0] 
-            
-            optS=[float(state[1])/tgt]
-            
-            r.set("t1_hw",optS[0])
-            if(isCpu):
-                sys.setU(optS[0],"tier1")
-            
-            queue.append(state[0])
-            S.append(optS[0])
-            tgt_v.append((1)/(1+0.1*tgt)*pop)
-            #print(state,optS,tgt_v)
-            time.sleep(stime)
-        
-        sys.stopClient()
-        sys.stopSystem()
+    T=np.linspace(0,len(rts),len(rts))
+    avgrt=np.divide(np.cumsum(rts),T)
+    
+    print(np.abs(avgrt[-1]-tgt*0.1)*100/(tgt*0.1))
         
     plt.figure()
-    plt.plot(queue,label="queuelength")
-    plt.plot(tgt_v,color='r',linestyle='--',label="tgt")
-    #plt.axhline(y=tgt_v, color='r', linestyle='--',label="tgt")
+    plt.plot(rts,label="rt")
+    plt.plot(avgrt,label="rt_cumavg")
+    #plt.plot(tgt_v,color='r',linestyle='--',label="tgt")
+    plt.axhline(y=tgt*0.1, color='r', linestyle='--',label="tgt")
     plt.legend()
     plt.savefig("rt.pdf")
     
     plt.figure()
     plt.plot(S,label="cores")
     plt.savefig("core.pdf")
+    
+    plt.figure()
+    plt.plot(pops,label="pop")
+    plt.savefig("pop.pdf")
+    
+    
     
 except Exception as ex:
     traceback.print_exception(type(ex), ex, ex.__traceback__)
