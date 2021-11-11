@@ -69,9 +69,6 @@ try:
         
     print("finished",step,drep)
         
-    sys.stopClient()
-    sys.stopSystem()
-    
     T=np.linspace(0,len(rts),len(rts))
     avgrt=np.divide(np.cumsum(rts),T)
     
@@ -94,9 +91,10 @@ try:
     plt.savefig("pop.pdf")
     
     
-    
 except Exception as ex:
     traceback.print_exception(type(ex), ex, ex.__traceback__)
+
+finally:
     sys.stopClient()
     sys.stopSystem()
 
