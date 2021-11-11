@@ -8,11 +8,6 @@ import os
 import psutil
 import requests as req
 
-try:
-    javaCmd = os.environ['JAVA_HOME'] + "/bin/java"
-except:
-    raise ValueError("Need to setup JAVA_HOME env variable")
-
 
 class jvm_sys(system_interface):
     
@@ -25,6 +20,12 @@ class jvm_sys(system_interface):
     keys = ["think", "e1_bl", "e1_ex", "t1_hw"]
     
     def __init__(self, sysRootPath,isCpu=True):
+        
+        try:
+            javaCmd = os.environ['JAVA_HOME'] + "/bin/java"
+        except:
+            raise ValueError("Need to setup JAVA_HOME env variable")
+        
         self.sysRootPath = sysRootPath
         if(isCpu):
             self.initCgroups()
