@@ -11,7 +11,7 @@ from pymemcache.client.base import Client
 import traceback
         
 
-isCpu=False
+isCpu=True
 #sys = jvm_sys("../",isCpu)
 sys = dockersys()
 nstep = 3000
