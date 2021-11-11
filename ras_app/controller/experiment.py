@@ -31,6 +31,7 @@ optS=None
 r=Client("localhost:11211")
 pop=100
 sys.startClient(pop)
+time.sleep(2)
 #r.set("t1_hw",20)
 pops=[pop]
 
