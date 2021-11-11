@@ -6,17 +6,19 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from cgroupspy import trees
 from jvm_sys import jvm_sys
+from docker_sys import dockersys
 from pymemcache.client.base import Client
 import traceback
         
 
-isCpu=True
-sys = jvm_sys("../",isCpu)
+isCpu=False
+#sys = jvm_sys("../",isCpu)
+sys = dockersys()
 nstep = 3000
 stime = 0.1
 tgt=4
 S=[]
-nrep=60
+nrep=20
 drep=0
 tgt_v=[]
 queue=[]
@@ -34,6 +36,10 @@ pops=[pop]
 
 try:
     while True:
+        while(r.get("sim")==None):
+            print("waiting")
+            time.sleep(0.2)
+            
         if r.get("sim").decode('UTF-8')=="step":
             r.set("sim","-1")
             if(drep>=nrep):
@@ -41,8 +47,6 @@ try:
             drep+=1
             print("change")
             
-        
-        #print(step,drep,nrep)
         state=sys.getstate(r)[0]
         pops.append(np.sum(state))
         
@@ -55,9 +59,11 @@ try:
         queue.append(state[0])
         S.append(optS[0])
         #tgt_v.append((1)/(1+0.1*tgt)*np.sum(state))
-        rts.append(float(r.get("rt_t1"))/(10**9));
+        rt=float(r.get("rt_t1"))/(10**9)
+        if(not np.isnan(rt)):
+            rts.append(rt);
         time.sleep(0.05)
-        if(not np.isnan(rts[-1])):
+        if(len(rts)>1 and not np.isnan(rts[-1])):
             Ik+=rts[-1]-tgt*0.1
         step+=1
         

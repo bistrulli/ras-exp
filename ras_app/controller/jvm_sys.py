@@ -134,8 +134,8 @@ class jvm_sys(system_interface):
             gidx = 1;
             for i in range(0, N):
                 astate.append(float(str_state[gidx].decode('UTF-8')) + float(str_state[gidx + 1].decode('UTF-8')))
-                # if(float(str_state[gidx]) < 0 or float(str_state[gidx + 1]) < 0):
-                #     raise ValueError("Error! state < 0")
+                if(float(str_state[gidx]) < 0 or float(str_state[gidx + 1]) < 0):
+                    raise ValueError("Error! state < 0")
                 gidx += 2
         except:
             print(time.asctime())
