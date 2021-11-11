@@ -46,7 +46,7 @@ try:
         state=sys.getstate(r)[0]
         pops.append(np.sum(state))
         
-        optS=[float(state[1])/tgt+(0.0*Ik)]
+        optS=[float(state[1])/tgt+(0.1*Ik)]
         
         r.set("t1_hw",optS[0])
         if(isCpu):
