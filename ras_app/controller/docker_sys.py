@@ -11,6 +11,7 @@ class dockersys(system_interface):
     dck_client = None
     cnt_names = ["tier1","monitor"]
     keys = ["think", "e1_bl", "e1_ex", "t1_hw"]
+    period = 100000
     
     def __init__(self):
         self.dck_client = docker.from_env()
