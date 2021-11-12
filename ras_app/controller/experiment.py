@@ -52,7 +52,7 @@ while(r.get("sim")==None):
     time.sleep(0.2)
     
 cores_init=[10]
-ctrlPeriod=1
+ctrlPeriod=0.1
 
 #monitor object
 mnt=systemMnt()
