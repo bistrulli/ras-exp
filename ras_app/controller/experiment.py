@@ -10,6 +10,7 @@ from docker_sys import dockersys
 from pymemcache.client.base import Client
 import traceback
 from controltheoreticalmulti import CTControllerScaleXNode
+import collections
 
 class systemMnt():
     rt = None
@@ -24,14 +25,14 @@ class systemMnt():
             return  [np.mean(self.rt)]
         
 
-isCpu=True
+isCpu=False
 sys = jvm_sys("../",isCpu)
 #sys = dockersys()
 nstep = 3000
 stime = 0.1
 tgt=4
 S=[]
-nrep=80
+nrep=60
 drep=0
 tgt_v=[]
 queue=[]
@@ -46,14 +47,29 @@ pop=100
 sys.startClient(pop)
 pops=[pop]
 
+while(r.get("sim")==None):
+    print("waiting")
+    time.sleep(0.2)
+    
+cores_init=[1]
+ctrlPeriod=1
+
+#monitor object
+mnt=systemMnt()
+c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.3], DCs=[0.3])
+c1.cores=cores_init
+c1.setSLA([tgt*0.1])
+c1.monitoring=mnt
+
 try:
     while True:
-        time.sleep(0.01)
-        if(len(rts)>1 and not np.isnan(rts[-1])):
-            while(r.get("sim")==None):
-                print("waiting")
-                time.sleep(0.2)
-                
+        time.sleep(ctrlPeriod)
+        rt=float(r.get("rt_t1"))/(10**9)
+        if(not np.isnan(rt)):
+            mnt.rt.append(rt);
+            rts.append(rt)
+        
+        if(len(mnt.rt)>0 and not np.isnan(mnt.rt[-1])):
             if r.get("sim").decode('UTF-8')=="step":
                 r.set("sim","-1")
                 if(drep>=nrep):
@@ -64,8 +80,12 @@ try:
             state=sys.getstate(r)[0]
             pops.append(np.sum(state))
             
+            c1.control(step)
+            #print("opt=",optS,"pid=",c1.cores)
             
             #optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
+            optS=c1.cores
+            
             
             r.set("t1_hw",optS[0])
             if(isCpu):
@@ -74,12 +94,10 @@ try:
             queue.append(state[0])
             S.append(optS[0])
             #tgt_v.append((1)/(1+0.1*tgt)*np.sum(state))
-            rt=float(r.get("rt_t1"))/(10**9)
-            if(not np.isnan(rt)):
-                rts.append(rt);
-            if(len(rts)>1 and not np.isnan(rts[-1])):
-                Ik+=rts[-1]-tgt*0.1
-            step+=1
+            #if(len(rts)>1 and not np.isnan(rts[-1])):
+            Ik+=mnt.rt[-1]-tgt*0.1
+            
+        step+=1
         
     print("finished",step,drep)
         

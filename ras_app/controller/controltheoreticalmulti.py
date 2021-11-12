@@ -25,15 +25,21 @@ class CTControllerScaleXNode(Controller):
         for i in range(self.N):
             if(np.isnan(rts[i])):
                 raise ValueError(self.cores,t)
+        
             
             e = (1.0/self.setpoint[i]) - (1.0/rts[i])
             #e=rts[i]-self.setpoint[i]
             #print(f'app {i} error:', e)
-            xc = self.xc_precs[i] + self.BCs[i] * e
+            # xc = self.xc_precs[i] + self.BCs[i] * e
+            # oldcores = self.cores[i]
+            # #self.cores[i] = min(max(max(MIN_CORES, oldcores/MAX_SCALE_OUT_TIMES), xc + self.DCs[i] * e), oldcores*MAX_SCALE_OUT_TIMES)
+            # self.cores[i] = max(MIN_CORES,self.cores[i]+xc + self.DCs[i] * e)
+            # self.xc_precs[i] = self.cores[i] - self.BCs[i] * e
+            
+            xc = float(self.xc_precs[i] + self.BCs[i] * e)
             oldcores = self.cores[i]
-            #self.cores[i] = min(max(max(MIN_CORES, oldcores/MAX_SCALE_OUT_TIMES), xc + self.DCs[i] * e), oldcores*MAX_SCALE_OUT_TIMES)
-            self.cores[i] = max(MIN_CORES,self.cores[i]+xc + self.DCs[i] * e)
-            self.xc_precs[i] = self.cores[i] - self.BCs[i] * e
+            self.cores[i] = min(max(max(MIN_CORES, oldcores/MAX_SCALE_OUT_TIMES), xc + self.DCs[i] * e), oldcores*MAX_SCALE_OUT_TIMES)
+            self.xc_precs[i] = float(self.cores[i] - self.BCs[i] * e)
             
             # if(self.cores[i]==MIN_CORES):
             #     raise ValueError("Error %f %f " %())
