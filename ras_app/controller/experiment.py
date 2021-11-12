@@ -51,7 +51,7 @@ try:
         print(state)
         pops.append(np.sum(state))
         
-        optS=[float(state[1])/tgt+(0.1*Ik)]
+        optS=[max(float(state[1])/tgt,0.1)+(0.1*Ik)]
         
         r.set("t1_hw",optS[0])
         if(isCpu):
