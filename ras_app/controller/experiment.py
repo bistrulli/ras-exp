@@ -11,7 +11,7 @@ from pymemcache.client.base import Client
 import traceback
         
 
-isCpu=True
+isCpu=False
 #sys = jvm_sys("../",isCpu)
 sys = dockersys()
 nstep = 3000
@@ -31,7 +31,6 @@ optS=None
 r=Client("localhost:11211")
 pop=100
 sys.startClient(pop)
-time.sleep(2)
 #r.set("t1_hw",20)
 pops=[pop]
 
