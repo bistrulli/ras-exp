@@ -18,11 +18,12 @@ class jvm_sys(system_interface):
     cgroups = None
     period = 100000
     keys = ["think", "e1_bl", "e1_ex", "t1_hw"]
+    javaCmd=None
     
     def __init__(self, sysRootPath,isCpu=True):
         
         try:
-            javaCmd = os.environ['JAVA_HOME'] + "/bin/java"
+            self.javaCmd = os.environ['JAVA_HOME'] + "/bin/java"
         except:
             raise ValueError("Need to setup JAVA_HOME env variable")
         
@@ -37,7 +38,7 @@ class jvm_sys(system_interface):
         r.close()
         
         
-        subprocess.Popen([javaCmd, "-Xmx4G",
+        subprocess.Popen([self.javaCmd, "-Xmx4G",
                          "-Djava.compiler=NONE", "-jar",
                          '%sras_client/target/ras_client-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                          '--initPop', '%d' % (pop), '--jedisHost','localhost', '--tier1Host','localhost',
@@ -72,7 +73,7 @@ class jvm_sys(system_interface):
         self.sys.append(self.findProcessIdByName("memcached")[0])
         
         if(not isCpu):
-            subprocess.Popen([javaCmd, "-Xmx4G",
+            subprocess.Popen([self.javaCmd, "-Xmx4G",
                              "-Djava.compiler=NONE", "-jar",
                              '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                              '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
@@ -80,7 +81,7 @@ class jvm_sys(system_interface):
             self.waitTier1()
             self.sys.append(self.findProcessIdByName("tier1-0.0.1")[0])
         else:
-            subprocess.Popen(["cgexec", "-g", "cpu:t1", "--sticky", javaCmd, "-Xmx4G",
+            subprocess.Popen(["cgexec", "-g", "cpu:t1", "--sticky", self.javaCmd, "-Xmx4G",
                              "-Djava.compiler=NONE", "-jar","-Xint",
                              '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                              '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
