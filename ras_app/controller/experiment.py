@@ -25,7 +25,7 @@ class systemMnt():
             return  [np.mean(self.rt)]
         
 
-isCpu=False
+isCpu=True
 sys = jvm_sys("../",isCpu)
 #sys = dockersys()
 nstep = 3000
