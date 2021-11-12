@@ -12,8 +12,8 @@ import traceback
         
 
 isCpu=True
-#sys = jvm_sys("../",isCpu)
-sys = dockersys()
+sys = jvm_sys("../",isCpu)
+#sys = dockersys()
 nstep = 3000
 stime = 0.1
 tgt=4
