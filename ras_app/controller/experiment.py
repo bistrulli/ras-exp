@@ -56,7 +56,7 @@ ctrlPeriod=1
 
 #monitor object
 mnt=systemMnt()
-c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.01], DCs=[0.5])
+c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.05], DCs=[0.1])
 c1.cores=cores_init
 c1.setSLA([tgt*0.1])
 c1.monitoring=mnt
