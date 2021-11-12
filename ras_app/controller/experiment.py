@@ -16,7 +16,7 @@ class systemMnt():
     rt = None
     
     def __init__(self):
-        self.rt=collections.deque(maxlen=1)
+        self.rt=collections.deque(maxlen=5)
         
     def getRT(self):
         if(len(self.rt)==0):
