@@ -43,7 +43,7 @@ Ik=0
 sys.startSys(isCpu)
 optS=None
 r=Client("localhost:11211")
-pop=120
+pop=80
 sys.startClient(pop)
 pops=[pop]
 
