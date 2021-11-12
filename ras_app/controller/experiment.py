@@ -9,6 +9,19 @@ from jvm_sys import jvm_sys
 from docker_sys import dockersys
 from pymemcache.client.base import Client
 import traceback
+from controltheoreticalmulti import CTControllerScaleXNode
+
+class systemMnt():
+    rt = None
+    
+    def __init__(self):
+        self.rt=collections.deque(maxlen=1)
+        
+    def getRT(self):
+        if(len(self.rt)==0):
+            return None
+        else:
+            return  [np.mean(self.rt)]
         
 
 isCpu=True
@@ -31,41 +44,42 @@ optS=None
 r=Client("localhost:11211")
 pop=100
 sys.startClient(pop)
-#r.set("t1_hw",20)
 pops=[pop]
 
 try:
     while True:
-        while(r.get("sim")==None):
-            print("waiting")
-            time.sleep(0.2)
-            
-        if r.get("sim").decode('UTF-8')=="step":
-            r.set("sim","-1")
-            if(drep>=nrep):
-                break
-            drep+=1
-            print("change")
-            
-        state=sys.getstate(r)[0]
-        pops.append(np.sum(state))
-        
-        optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
-        
-        r.set("t1_hw",optS[0])
-        if(isCpu):
-            sys.setU(optS[0],"tier1")
-        
-        queue.append(state[0])
-        S.append(optS[0])
-        #tgt_v.append((1)/(1+0.1*tgt)*np.sum(state))
-        rt=float(r.get("rt_t1"))/(10**9)
-        if(not np.isnan(rt)):
-            rts.append(rt);
         time.sleep(0.01)
         if(len(rts)>1 and not np.isnan(rts[-1])):
-            Ik+=rts[-1]-tgt*0.1
-        step+=1
+            while(r.get("sim")==None):
+                print("waiting")
+                time.sleep(0.2)
+                
+            if r.get("sim").decode('UTF-8')=="step":
+                r.set("sim","-1")
+                if(drep>=nrep):
+                    break
+                drep+=1
+                print("change")
+                
+            state=sys.getstate(r)[0]
+            pops.append(np.sum(state))
+            
+            
+            #optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
+            
+            r.set("t1_hw",optS[0])
+            if(isCpu):
+                sys.setU(optS[0],"tier1")
+            
+            queue.append(state[0])
+            S.append(optS[0])
+            #tgt_v.append((1)/(1+0.1*tgt)*np.sum(state))
+            rt=float(r.get("rt_t1"))/(10**9)
+            if(not np.isnan(rt)):
+                rts.append(rt);
+            if(len(rts)>1 and not np.isnan(rts[-1])):
+                Ik+=rts[-1]-tgt*0.1
+            step+=1
         
     print("finished",step,drep)
         
