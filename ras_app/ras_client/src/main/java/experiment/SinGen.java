@@ -12,7 +12,7 @@ public class SinGen extends Experiment{
 	public SinGen(SimpleTask workGenerator,double mod, double period) {
 		super(workGenerator);
 		this.mod=mod;
-		this.period=period;
+		this.period= period/ (2*Math.PI);
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class SinGen extends Experiment{
 
 	@Override
 	public void tick() {
-		if (this.tick % 5 == 0) {
+		if (this.tick % 10 == 0) {
 			int nc=Double.valueOf(Math.cos(this.tick/this.period)*this.mod).intValue();
 			if(nc<0 && Math.abs(nc)>this.workGenerator.getThreadpool().getCorePoolSize()-20){
 				nc=0;

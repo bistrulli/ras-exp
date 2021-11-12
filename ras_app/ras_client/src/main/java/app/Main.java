@@ -82,7 +82,7 @@ public class Main {
 
 	private static void startSim(SimpleTask client) {
 		ScheduledExecutorService se = Executors.newSingleThreadScheduledExecutor();
-		SinGen sim= new SinGen(client, 25, 20);
+		SinGen sim= new SinGen(client, 25, 400);
 		se.scheduleAtFixedRate(sim, 0, 1, TimeUnit.SECONDS);
 	}
 

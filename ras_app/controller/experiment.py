@@ -16,7 +16,7 @@ class systemMnt():
     rt = None
     
     def __init__(self):
-        self.rt=collections.deque(maxlen=5)
+        self.rt=collections.deque(maxlen=1)
         
     def getRT(self):
         if(len(self.rt)==0):
@@ -25,14 +25,14 @@ class systemMnt():
             return  [np.mean(self.rt)]
         
 
-isCpu=True
+isCpu=False
 sys = jvm_sys("../",isCpu)
 #sys = dockersys()
 nstep = 3000
 stime = 0.1
 tgt=4
 S=[]
-nrep=100
+nrep=50
 drep=0
 tgt_v=[]
 queue=[]
@@ -43,7 +43,7 @@ Ik=0
 sys.startSys(isCpu)
 optS=None
 r=Client("localhost:11211")
-pop=100
+pop=120
 sys.startClient(pop)
 pops=[pop]
 
@@ -51,12 +51,12 @@ while(r.get("sim")==None):
     print("waiting")
     time.sleep(0.2)
     
-cores_init=[1]
+cores_init=[10]
 ctrlPeriod=1
 
 #monitor object
 mnt=systemMnt()
-c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.35], DCs=[0.6])
+c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.01], DCs=[0.5])
 c1.cores=cores_init
 c1.setSLA([tgt*0.1])
 c1.monitoring=mnt
