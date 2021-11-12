@@ -18,7 +18,7 @@ nstep = 3000
 stime = 0.1
 tgt=4
 S=[]
-nrep=20
+nrep=60
 drep=0
 tgt_v=[]
 queue=[]
@@ -48,7 +48,6 @@ try:
             print("change")
             
         state=sys.getstate(r)[0]
-        print(state)
         pops.append(np.sum(state))
         
         optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
@@ -63,7 +62,7 @@ try:
         rt=float(r.get("rt_t1"))/(10**9)
         if(not np.isnan(rt)):
             rts.append(rt);
-        time.sleep(0.1)
+        time.sleep(0.05)
         if(len(rts)>1 and not np.isnan(rts[-1])):
             Ik+=rts[-1]-tgt*0.1
         step+=1
