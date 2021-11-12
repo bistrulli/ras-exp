@@ -83,8 +83,8 @@ try:
             c1.control(step)
             print("opt=",optS,"pid=",c1.cores,mnt.rt[-1])
             
-            #optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
-            optS=c1.cores
+            optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
+            #optS=c1.cores
             
             
             r.set("t1_hw",optS[0])
