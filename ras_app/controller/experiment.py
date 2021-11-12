@@ -48,6 +48,7 @@ try:
             print("change")
             
         state=sys.getstate(r)[0]
+        print(state)
         pops.append(np.sum(state))
         
         optS=[float(state[1])/tgt+(0.1*Ik)]
