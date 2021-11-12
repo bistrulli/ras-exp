@@ -63,7 +63,7 @@ try:
         rt=float(r.get("rt_t1"))/(10**9)
         if(not np.isnan(rt)):
             rts.append(rt);
-        time.sleep(0.3)
+        time.sleep(0.1)
         if(len(rts)>1 and not np.isnan(rts[-1])):
             Ik+=rts[-1]-tgt*0.1
         step+=1
