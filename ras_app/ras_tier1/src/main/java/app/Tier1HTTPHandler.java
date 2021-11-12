@@ -16,6 +16,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import Server.SimpleTask;
 import Server.TierHttpHandler;
+import monitoring.rtSample;
 
 @SuppressWarnings("restriction")
 public class Tier1HTTPHandler extends TierHttpHandler {
@@ -28,7 +29,7 @@ public class Tier1HTTPHandler extends TierHttpHandler {
 
 	public void handleResponse(HttpExchange req, String requestParamValue) throws InterruptedException, IOException {
 		Map<String, String> params = this.getLqntask().queryToMap(req.getRequestURI().getQuery());
-		
+
 		this.measureIngress();
 
 		Jinjava jinjava = new Jinjava();
@@ -58,7 +59,6 @@ public class Tier1HTTPHandler extends TierHttpHandler {
 			this.doWorkSleep(executing);
 		}
 
-
 		req.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
 		req.getResponseHeaders().set("Cache-Control", "no-store, no-cache, max-age=0, must-revalidate");
 		OutputStream outputStream = req.getResponseBody();
@@ -67,10 +67,9 @@ public class Tier1HTTPHandler extends TierHttpHandler {
 		outputStream.flush();
 		outputStream.close();
 		outputStream = null;
-		
-		Long rtime=System.nanoTime()-Long.valueOf( this.getLqntask().getEnqueueTime().get(params.get("id")));
-		this.getLqntask().getRts().addSample(rtime);
-		//System.out.println(String.format("%f",rtime*1.0/Math.pow(10,9)));
+
+		this.getLqntask().getRts().addSample(new rtSample(Long.valueOf(this.getLqntask().getEnqueueTime().get(params.get("id"))),
+				System.nanoTime()));
 	}
 
 	@Override

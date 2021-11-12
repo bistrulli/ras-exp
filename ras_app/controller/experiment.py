@@ -32,7 +32,7 @@ nstep = 3000
 stime = 0.1
 tgt=4
 S=[]
-nrep=60
+nrep=40
 drep=0
 tgt_v=[]
 queue=[]
@@ -56,7 +56,7 @@ ctrlPeriod=1
 
 #monitor object
 mnt=systemMnt()
-c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.3], DCs=[0.3])
+c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.2], DCs=[0.5])
 c1.cores=cores_init
 c1.setSLA([tgt*0.1])
 c1.monitoring=mnt
@@ -81,7 +81,7 @@ try:
             pops.append(np.sum(state))
             
             c1.control(step)
-            #print("opt=",optS,"pid=",c1.cores)
+            print("opt=",optS,"pid=",c1.cores,mnt.rt[-1])
             
             #optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
             optS=c1.cores
