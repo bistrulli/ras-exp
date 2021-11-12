@@ -50,7 +50,7 @@ try:
         state=sys.getstate(r)[0]
         pops.append(np.sum(state))
         
-        optS=[max(float(state[1])/tgt+(0.1*Ik),0.001)]
+        optS=[max(float(state[1])/tgt+(0.1*Ik),0.1)]
         
         r.set("t1_hw",optS[0])
         if(isCpu):
@@ -62,7 +62,7 @@ try:
         rt=float(r.get("rt_t1"))/(10**9)
         if(not np.isnan(rt)):
             rts.append(rt);
-        time.sleep(0.2)
+        time.sleep(0.01)
         if(len(rts)>1 and not np.isnan(rts[-1])):
             Ik+=rts[-1]-tgt*0.1
         step+=1
