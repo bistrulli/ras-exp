@@ -51,7 +51,6 @@ public class Client implements Runnable {
 					+ this.clietId.toString() + "&entry=e1" + "&snd=think")).build();
 
 			this.memcachedClient.set("started", 3600, String.valueOf(1)).get();
-
 			MCAtomicUpdater.AtomicIncr(this.memcachedClient, 1, "think", 100);
 
 			while ((this.memcachedClient.get("stop") == null
