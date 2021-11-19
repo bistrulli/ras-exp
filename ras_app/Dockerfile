@@ -7,6 +7,12 @@ RUN apt-get update -y
 RUN apt-get install openjdk-15-jdk -y
 RUN apt-get install maven -y
 RUN apt-get install git -y
+RUN apt-get install python -y
+RUN apt-get install pip -y
+RUN apt-get install sudo -y
+RUN apt-get install openssh-server -y
+
+RUN pip install numpy scipy matplotlib tqdm cgroupspy docker pymemcache psutil
 
 #download code
 RUN git clone --branch poli https://github.com/bistrulli/AdaptiveHttpServer.git
@@ -14,10 +20,10 @@ RUN git clone https://github.com/bistrulli/ras-exp.git
 
 WORKDIR /AdaptiveHttpServer
 
-RUN mvn install
+RUN mvn clean install
 
 WORKDIR /ras-exp/ras_app/
 
-RUN mvn package
+RUN mvn clean package
 
-WORKDIR /ras-exp/ras_app/ras_client/target 
+CMD ["/bin/bash"]

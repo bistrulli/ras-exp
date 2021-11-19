@@ -1,12 +1,8 @@
-import subprocess
 import time
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from tqdm import tqdm
-from cgroupspy import trees
 from jvm_sys import jvm_sys
-from docker_sys import dockersys
 from pymemcache.client.base import Client
 import traceback
 from controltheoreticalmulti import CTControllerScaleXNode
@@ -32,7 +28,7 @@ nstep = 3000
 stime = 0.1
 tgt=4
 S=[]
-nrep=50
+nrep=10
 drep=0
 tgt_v=[]
 queue=[]
@@ -43,9 +39,9 @@ Ik=0
 sys.startSys(isCpu)
 optS=None
 r=Client("localhost:11211")
-pop=80
-sys.startClient(pop)
-pops=[pop]
+initPop=80
+sys.startClient(initPop)
+pops=[initPop]
 
 while(r.get("sim")==None):
     print("waiting")
@@ -60,6 +56,9 @@ c1 = CTControllerScaleXNode(ctrlPeriod, cores_init, 100, BCs=[0.15], DCs=[0.05])
 c1.cores=cores_init
 c1.setSLA([tgt*0.1])
 c1.monitoring=mnt
+
+CTRL=""
+
 
 try:
     while True:
@@ -93,8 +92,6 @@ try:
             
             queue.append(state[0])
             S.append(optS[0])
-            #tgt_v.append((1)/(1+0.1*tgt)*np.sum(state))
-            #if(len(rts)>1 and not np.isnan(rts[-1])):
             Ik+=mnt.rt[-1]-tgt*0.1
             
         step+=1
@@ -112,15 +109,15 @@ try:
     #plt.plot(tgt_v,color='r',linestyle='--',label="tgt")
     plt.axhline(y=tgt*0.1, color='r', linestyle='--',label="tgt")
     plt.legend()
-    plt.savefig("rt.pdf")
+    plt.savefig("./exp/rt.pdf")
     
     plt.figure()
     plt.plot(S,label="cores")
-    plt.savefig("core.pdf")
+    plt.savefig("./exp/core.pdf")
     
     plt.figure()
     plt.plot(pops,label="pop")
-    plt.savefig("pop.pdf")
+    plt.savefig("./exp/pop.pdf")
     
     
 except Exception as ex:
