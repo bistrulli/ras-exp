@@ -21,9 +21,11 @@ RUN tar -xvf memcached-1.6.12.tar.gz
 
 WORKDIR /memcached-1.6.12
 
-RUN configure
+RUN ./configure
 RUN make
 RUN make install
+
+WORKDIR /
 
 #download code
 RUN git clone --branch poli https://github.com/bistrulli/AdaptiveHttpServer.git
