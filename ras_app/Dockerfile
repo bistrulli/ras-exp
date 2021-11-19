@@ -26,4 +26,6 @@ WORKDIR /ras-exp/ras_app/
 
 RUN mvn clean package
 
+WORKDIR /ras-exp/ras_app/controller
+
 CMD ["/bin/bash"]
