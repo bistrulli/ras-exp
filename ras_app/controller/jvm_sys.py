@@ -238,12 +238,15 @@ if __name__ == "__main__":
         jvm_sys = jvm_sys("../",isCpu)
         
         for i in range(1):
+            g = Client("localhost:11211")
+            g.set("t1_hw","10")  
+            jvm_sys.setU(1.0,"tier1")
+            
             jvm_sys.startSys(isCpu)
-            jvm_sys.startClient(1)
+            jvm_sys.startClient(10)
                 
             mnt = Client("localhost:11211")
-            g = Client("localhost:11211")
-            g.set("t1_hw","4")
+            
             X=[]
             for i in range(300):
                 # state=jvm_sys.getstate(mnt)
