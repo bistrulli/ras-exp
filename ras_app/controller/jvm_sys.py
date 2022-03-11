@@ -16,7 +16,7 @@ class jvm_sys(system_interface):
     client = None
     croot = None
     cgroups = None
-    period = 1000000
+    period = 1000
     keys = ["think", "e1_bl", "e1_ex", "t1_hw"]
     javaCmd=None
     
@@ -223,7 +223,7 @@ class jvm_sys(system_interface):
         quota=int(np.round(RL * self.period))
     
         self.cgroups[cnt_name]["cg"].controller.cfs_period_us=self.period
-        self.cgroups[cnt_name]["cg"].controller.cfs_quota_us = max(quota,1000) 
+        self.cgroups[cnt_name]["cg"].controller.cfs_quota_us = quota 
     
     def getRT(self,monitor):
         #qui si deve estendere per prendere tutti i response time
