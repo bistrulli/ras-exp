@@ -81,14 +81,14 @@ class jvm_sys(system_interface):
             self.waitTier1()
             self.sys.append(self.findProcessIdByName("tier1-0.0.1")[0])
         else:
-            # subprocess.Popen(["cgexec", "-g", "cpu:t1", "--sticky", self.javaCmd, "-Xmx4G",
-            #                  "-Djava.compiler=NONE", "-jar","-Xint",
-            #                  '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
-            #                  '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
-            
-            subprocess.Popen([self.javaCmd, "-Xmx4G","-jar",
+            subprocess.Popen(["cgexec", "-g", "cpu:t1", "--sticky", self.javaCmd, "-Xmx4G",
+                             "-Djava.compiler=NONE", "-jar","-Xint",
                              '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                              '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
+            
+            # subprocess.Popen([self.javaCmd, "-Xmx4G","-jar",
+            #                  '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
+            #                  '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
             self.waitTier1()
             self.sys.append(self.findProcessIdByName("tier1-0.0.1")[0])
     
@@ -249,7 +249,7 @@ if __name__ == "__main__":
             
             g = Client("localhost:11211")
             g.set("t1_hw","20")
-            #jvm_sys.setU(1.0,"tier1")    
+            jvm_sys.setU(1.0,"tier1")    
             mnt = Client("localhost:11211")
             
             X=[]
