@@ -16,7 +16,7 @@ class jvm_sys(system_interface):
     client = None
     croot = None
     cgroups = None
-    period = 1000
+    period = 10
     keys = ["think", "e1_bl", "e1_ex", "t1_hw"]
     javaCmd=None
     
