@@ -70,10 +70,10 @@ public class Client implements Runnable {
 
 				SimpleTask.getLogger().debug(String.format("%s thinking", thinking));
 				
-				if (Client.getToKill().get() > 0) {
-					Client.toKill.decrementAndGet();
-					this.dying = true;
-				}
+//				if (Client.getToKill().get() > 0) {
+//					Client.toKill.decrementAndGet();
+//					this.dying = true;
+//				}
 			}
 			MCAtomicUpdater.AtomicIncr(this.memcachedClient, -1, "think", 100);
 			SimpleTask.getLogger().debug(String.format(" user %s stopped", this.clietId));

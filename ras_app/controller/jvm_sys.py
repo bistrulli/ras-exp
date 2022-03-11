@@ -220,6 +220,15 @@ class jvm_sys(system_interface):
     
         self.cgroups[cnt_name]["cg"].controller.cfs_period_us=self.period
         self.cgroups[cnt_name]["cg"].controller.cfs_quota_us = max(quota,1000) 
+    
+    def getRT(self,monitor):
+        #qui si deve estendere per prendere tutti i response time
+        RT=monitor.get("rt_t1")
+        if(RT is not None):
+            RT=float(RT.decode('UTF-8'))
+        
+        
+        return RT
         
        
             
@@ -230,23 +239,29 @@ if __name__ == "__main__":
         
         for i in range(1):
             jvm_sys.startSys(isCpu)
-            jvm_sys.startClient(30)
+            jvm_sys.startClient(150)
                 
             mnt = Client("localhost:11211")
             g = Client("localhost:11211")
-            g.set("t1_hw","2")
+            g.set("t1_hw","6")
             X=[]
-            for i in range(1000):
-                state=jvm_sys.getstate(mnt)
-                print(state[0],i)
-                X.append(state[0][0])
+            for i in range(300):
+                # state=jvm_sys.getstate(mnt)
+                # print(state[0],i)
+                # X.append(state[0][0])
+                #
+                # if(isCpu):
+                #     jvm_sys.setU(10,"tier1")
                 
-                if(isCpu):
-                    jvm_sys.setU(10,"tier1")
-                time.sleep(0.05)
+                
+                time.sleep(1)
+                print(i)
+            
+            RT=jvm_sys.getRT(mnt)
             mnt.close()
             
-            print(np.mean(X))
+            print(RT/10**9)
+            #print(np.mean(X))
             
             jvm_sys.stopClient()
             jvm_sys.stopSystem()
