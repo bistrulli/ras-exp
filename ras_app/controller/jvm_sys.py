@@ -251,7 +251,7 @@ if __name__ == "__main__":
             mnt = Client("localhost:11211")
             
             X=[]
-            for i in range(300):
+            for i in range(1000):
                 # state=jvm_sys.getstate(mnt)
                 # print(state[0],i)
                 # X.append(state[0][0])
@@ -260,13 +260,13 @@ if __name__ == "__main__":
                 #     jvm_sys.setU(10,"tier1")
                 
                 
-                time.sleep(1)
+                print(RT/10**9)
+                time.sleep(0.3)
                 print(i)
             
             RT=jvm_sys.getRT(mnt)
             mnt.close()
             
-            print(RT/10**9)
             #print(np.mean(X))
             
             jvm_sys.stopClient()
