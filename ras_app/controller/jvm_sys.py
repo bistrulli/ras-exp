@@ -16,7 +16,7 @@ class jvm_sys(system_interface):
     client = None
     croot = None
     cgroups = None
-    period = 10
+    period = 1000
     keys = ["think", "e1_bl", "e1_ex", "t1_hw"]
     javaCmd=None
     
@@ -248,7 +248,7 @@ if __name__ == "__main__":
             jvm_sys.startClient(40)
             
             g = Client("localhost:11211")
-            g.set("t1_hw","40")
+            g.set("t1_hw","1")
             jvm_sys.setU(1.0,"tier1")    
             mnt = Client("localhost:11211")
             
