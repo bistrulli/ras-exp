@@ -234,16 +234,16 @@ class jvm_sys(system_interface):
             
 if __name__ == "__main__":
     try:
-        isCpu=False
+        isCpu=True
         jvm_sys = jvm_sys("../",isCpu)
         
         for i in range(1):
             jvm_sys.startSys(isCpu)
-            jvm_sys.startClient(150)
+            jvm_sys.startClient(1)
                 
             mnt = Client("localhost:11211")
             g = Client("localhost:11211")
-            g.set("t1_hw","6")
+            g.set("t1_hw","4")
             X=[]
             for i in range(300):
                 # state=jvm_sys.getstate(mnt)
