@@ -247,7 +247,7 @@ if __name__ == "__main__":
             
             jvm_sys.setU(1.0,"tier1")  
             
-            jvm_sys.startClient(10)
+            jvm_sys.startClient(100)
                 
             mnt = Client("localhost:11211")
             
