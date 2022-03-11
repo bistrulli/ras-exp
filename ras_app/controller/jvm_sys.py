@@ -86,7 +86,7 @@ class jvm_sys(system_interface):
             #                  '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
             #                  '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
             
-            subprocess.Popen([self.javaCmd, "-Xmx4G","-Djava.compiler=NONE", "-jar","-Xint",
+            subprocess.Popen([self.javaCmd, "-Xmx4G","-jar",
                              '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                              '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
             self.waitTier1()
