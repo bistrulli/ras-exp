@@ -259,12 +259,12 @@ if __name__ == "__main__":
                 # if(isCpu):
                 #     jvm_sys.setU(10,"tier1")
                 
-                
+                RT=jvm_sys.getRT(mnt)
                 print(RT/10**9)
                 time.sleep(0.3)
                 print(i)
             
-            RT=jvm_sys.getRT(mnt)
+           
             mnt.close()
             
             #print(np.mean(X))
