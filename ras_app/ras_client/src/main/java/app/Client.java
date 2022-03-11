@@ -56,19 +56,19 @@ public class Client implements Runnable {
 			while ((this.memcachedClient.get("stop") == null
 					|| !String.valueOf(this.memcachedClient.get("stop")).equals("1")) && !this.dying) {
 
-				String thinking = String.valueOf(this.memcachedClient.get("think"));
+//				String thinking = String.valueOf(this.memcachedClient.get("think"));
 
-				SimpleTask.getLogger().debug(String.format("stop=%s", String.valueOf(memcachedClient.get("stop"))));
+//				SimpleTask.getLogger().debug(String.format("stop=%s", String.valueOf(memcachedClient.get("stop"))));
 				TimeUnit.MILLISECONDS.sleep(Double.valueOf(this.dist.sample()).longValue());
 
-				SimpleTask.getLogger().debug(String.format("%s sending", this.task.getName()));
+//				SimpleTask.getLogger().debug(String.format("%s sending", this.task.getName()));
 				HttpResponse<String> resp = client.send(request, BodyHandlers.ofString());
 
 				// long thinking = this.memcachedClient.incr("think", 1);
-				MCAtomicUpdater.AtomicIncr(this.memcachedClient, -1, "e1_ex", 100);
-				MCAtomicUpdater.AtomicIncr(this.memcachedClient, 1, "think", 100);
+//				MCAtomicUpdater.AtomicIncr(this.memcachedClient, -1, "e1_ex", 100);
+//				MCAtomicUpdater.AtomicIncr(this.memcachedClient, 1, "think", 100);
 
-				SimpleTask.getLogger().debug(String.format("%s thinking", thinking));
+//				SimpleTask.getLogger().debug(String.format("%s thinking", thinking));
 				
 //				if (Client.getToKill().get() > 0) {
 //					Client.toKill.decrementAndGet();
