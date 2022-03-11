@@ -248,8 +248,8 @@ if __name__ == "__main__":
             jvm_sys.startClient(40)
             
             g = Client("localhost:11211")
-            g.set("t1_hw","10")
-            jvm_sys.setU(1.0,"tier1")    
+            g.set("t1_hw","1")
+            #jvm_sys.setU(1.0,"tier1")    
             mnt = Client("localhost:11211")
             
             X=[]
