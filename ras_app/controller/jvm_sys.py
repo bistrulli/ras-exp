@@ -81,7 +81,7 @@ class jvm_sys(system_interface):
             self.waitTier1()
             self.sys.append(self.findProcessIdByName("tier1-0.0.1")[0])
         else:
-            subprocess.Popen(["cgexec", "-g", "cpu:t1", "--sticky", self.javaCmd, "-Xmx4G",
+            subprocess.Popen(["cgexec", "-g", "cpu,cpuset:t1", "--sticky", self.javaCmd, "-Xmx4G",
                              "-Djava.compiler=NONE", "-jar","-Xint",
                              '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                              '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
@@ -266,7 +266,7 @@ if __name__ == "__main__":
             jvm_sys.startClient(100)
             
             g = Client("localhost:11211")
-            g.set("t1_hw","1")
+            g.set("t1_hw","10")
             #jvm_sys.setU(1.0,"tier1")
             jvm_sys.setCpuset([2],"tier1")    
             mnt = Client("localhost:11211")
