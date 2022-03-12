@@ -240,7 +240,7 @@ class jvm_sys(system_interface):
             self.cgroups[cnt_name]["cg"]["cpuset"] = trees.Tree().get_node_by_path('/cpuset/%s'%(self.cgroups[cnt_name]["name"]))
     
         self.cgroups[cnt_name]["cg"]["cpuset"].controller.cpus=cpus
-        self.cgroups[cnt_name]["cg"]["cpuset"].controller.mems=0
+        self.cgroups[cnt_name]["cg"]["cpuset"].controller.mems=[0]
     
     
     
