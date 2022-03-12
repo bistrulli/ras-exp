@@ -266,7 +266,7 @@ if __name__ == "__main__":
             jvm_sys.startClient(100)
             
             g = Client("localhost:11211")
-            g.set("t1_hw","100")
+            g.set("t1_hw","1")
             #jvm_sys.setU(1.0,"tier1")
             jvm_sys.setCpuset([2],"tier1")    
             mnt = Client("localhost:11211")
