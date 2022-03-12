@@ -272,7 +272,7 @@ if __name__ == "__main__":
             mnt = Client("localhost:11211")
             
             X=[]
-            for i in range(1000):
+            for i in range(10000):
                 # state=jvm_sys.getstate(mnt)
                 # print(state[0],i)
                 # X.append(state[0][0])
