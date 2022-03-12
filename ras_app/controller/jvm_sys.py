@@ -263,7 +263,7 @@ if __name__ == "__main__":
             
             
             jvm_sys.startSys(isCpu)
-            jvm_sys.startClient(40)
+            jvm_sys.startClient(1)
             
             g = Client("localhost:11211")
             g.set("t1_hw","3")
