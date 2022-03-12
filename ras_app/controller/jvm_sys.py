@@ -208,22 +208,43 @@ class jvm_sys(system_interface):
     def initCgroups(self): 
         self.cgroups={"tier1":{"name":"t1","cg":None}}
         
-        p= subprocess.Popen(["cgget", "-g", "cpu:t1"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p= subprocess.Popen(["cgget", "-g", "cpu,cpuset:t1"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if(str(err).find("Cgroup does not exist") != -1):
-            subprocess.check_output(["sudo", "cgcreate", "-g", "cpu:t1","-a","emilio:emilio","-t","emilio:emilio"])
+            subprocess.check_output(["sudo", "cgcreate", "-g", "cpu,cpuset:t1","-a","%s:%s"%(os.getlogin(),os.getlogin()),
+                                     "-t","%s:%s"%(os.getlogin(),os.getlogin())])
     
     def setU(self,RL,cnt_name):
         
-        if(self.cgroups[cnt_name]["cg"]== None):
-            print("set cgrop for %s"%(self.cgroups[cnt_name]["name"]))
-            self.cgroups[cnt_name]["cg"] = trees.Tree().get_node_by_path('/cpu/%s'%(self.cgroups[cnt_name]["name"]))
+        if(self.cgroups[cnt_name]["cg"]== None or self.cgroups[cnt_name]["cg"]["cpu"]== None):
+            print("get cgrop for %s"%(self.cgroups[cnt_name]["name"]))
             
-        
+            if(self.cgroups[cnt_name]["cg"]== None):
+                self.cgroups[cnt_name]["cg"]={}
+                
+            self.cgroups[cnt_name]["cg"]["cpu"] = trees.Tree().get_node_by_path('/cpu/%s'%(self.cgroups[cnt_name]["name"]))
+            
         quota=int(np.round(RL * self.period))
     
-        self.cgroups[cnt_name]["cg"].controller.cfs_period_us=self.period
-        self.cgroups[cnt_name]["cg"].controller.cfs_quota_us = quota 
+        self.cgroups[cnt_name]["cg"]["cpu"].controller.cfs_period_us=self.period
+        self.cgroups[cnt_name]["cg"]["cpu"].controller.cfs_quota_us = quota
+    
+    def setCpuset(self,Cpus,cnt_name):
+    
+        if(self.cgroups[cnt_name]["cg"]== None or self.cgroups[cnt_name]["cg"]["cpuset"]== None):
+            print("get cgrop for %s"%(self.cgroups[cnt_name]["name"]))
+            
+            if(self.cgroups[cnt_name]["cg"]== None):
+                self.cgroups[cnt_name]["cg"]={}
+                
+            self.cgroups[cnt_name]["cg"]["cpuset"] = trees.Tree().get_node_by_path('/cpuset/%s'%(self.cgroups[cnt_name]["name"]))
+            
+        quota=int(np.round(RL * self.period))
+    
+        #self.cgroups[cnt_name]["cg"]["cpuset"].controller.cfs_period_us=self.period
+        #self.cgroups[cnt_name]["cg"]["cpuset"].controller.cfs_quota_us = quota
+    
+    
     
     def getRT(self,monitor):
         #qui si deve estendere per prendere tutti i response time
