@@ -81,7 +81,7 @@ class jvm_sys(system_interface):
             self.waitTier1()
             self.sys.append(self.findProcessIdByName("tier1-0.0.1")[0])
         else:
-            subprocess.Popen(["cgexec", "-g", "cpuset:t1", self.javaCmd, "-Xmx4G",
+            subprocess.Popen(["cgexec", "-g", "cpu,cpuset:t1", self.javaCmd, "-Xmx4G",
                              "-Djava.compiler=NONE", "-jar","-Xint",
                              '%sras_tier1/target/ras_tier1-0.0.1-SNAPSHOT-jar-with-dependencies.jar' % (self.sysRootPath),
                              '--cpuEmu', "%d" % (cpuEmu), '--jedisHost', 'localhost'])
@@ -240,6 +240,7 @@ class jvm_sys(system_interface):
             self.cgroups[cnt_name]["cg"]["cpuset"] = trees.Tree().get_node_by_path('/cpuset/%s'%(self.cgroups[cnt_name]["name"]))
     
         self.cgroups[cnt_name]["cg"]["cpuset"].controller.cpus=cpus
+        self.cgroups[cnt_name]["cg"]["cpuset"].controller.mems=0
     
     
     
@@ -258,6 +259,7 @@ if __name__ == "__main__":
     try:
         isCpu=True
         jvm_sys = jvm_sys("../",isCpu)
+        jvm_sys.setCpuset([2],"tier1") 
         
         for i in range(1):
             
@@ -268,7 +270,7 @@ if __name__ == "__main__":
             g = Client("localhost:11211")
             g.set("t1_hw","10")
             #jvm_sys.setU(1.0,"tier1")
-            jvm_sys.setCpuset([2],"tier1")    
+            #jvm_sys.setCpuset([2],"tier1")    
             mnt = Client("localhost:11211")
             
             X=[]
