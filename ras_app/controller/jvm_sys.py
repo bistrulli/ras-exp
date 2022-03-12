@@ -229,7 +229,7 @@ class jvm_sys(system_interface):
         self.cgroups[cnt_name]["cg"]["cpu"].controller.cfs_period_us=self.period
         self.cgroups[cnt_name]["cg"]["cpu"].controller.cfs_quota_us = quota
     
-    def setCpuset(self,Cpus,cnt_name):
+    def setCpuset(self,cpus,cnt_name):
     
         if(self.cgroups[cnt_name]["cg"]== None or self.cgroups[cnt_name]["cg"]["cpuset"]== None):
             print("get cgrop for %s"%(self.cgroups[cnt_name]["name"]))
@@ -238,11 +238,8 @@ class jvm_sys(system_interface):
                 self.cgroups[cnt_name]["cg"]={}
                 
             self.cgroups[cnt_name]["cg"]["cpuset"] = trees.Tree().get_node_by_path('/cpuset/%s'%(self.cgroups[cnt_name]["name"]))
-            
-        quota=int(np.round(RL * self.period))
     
-        #self.cgroups[cnt_name]["cg"]["cpuset"].controller.cfs_period_us=self.period
-        #self.cgroups[cnt_name]["cg"]["cpuset"].controller.cfs_quota_us = quota
+        self.cgroups[cnt_name]["cg"]["cpuset"].controller.cpus=cpus
     
     
     
@@ -269,8 +266,9 @@ if __name__ == "__main__":
             jvm_sys.startClient(40)
             
             g = Client("localhost:11211")
-            g.set("t1_hw","1")
-            jvm_sys.setU(1.0,"tier1")    
+            g.set("t1_hw","3")
+            #jvm_sys.setU(1.0,"tier1")
+            jvm_sys.setCpuset("2","tier1")    
             mnt = Client("localhost:11211")
             
             X=[]
